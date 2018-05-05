@@ -35,8 +35,12 @@ void main()
 	vec3 diffuse = diff * lightColor;
 	
 	//SPECULAR
-	float specularLength = 0.5;
+	float specularStrength = 1;
+	vec3 viewDir = normalize(cameraPos - FragPos);
+	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);
+	vec3 specular = specularStrength * spec * lightColor; 
 	
-	result = ((ambient + diffuse) / pow(lightLength,2)) * color;
+	result = ((ambient + diffuse + specular) / pow(lightLength,2))  * color;
 	color = result;
 }

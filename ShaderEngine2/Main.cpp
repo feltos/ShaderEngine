@@ -1,16 +1,24 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/ext.hpp>
 #include <iostream>
+#include <vector>
+#include <stdlib.h>
 #include "LoadShader.h"
 #include "BMP.h"
 #include "ObjLoader.h"
 
 void MouseCallback(sf::Window* window, double xpos, double ypos);
+GLuint Loadcubemap(std::vector<std::string> faces);
+
+LoadShader loader;
+BMP bmp;
+ObjLoader objLoader;
 
 glm::vec3 cameraPos = glm::vec3(0, 0, 10);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -22,11 +30,20 @@ float lastX = 1920.0 / 2.0;
 float lastY = 1080.0 / 2.0;
 bool firstMouse = true;
 
+std::vector<std::string> faces
+{
+	"right.jpg",
+	"left.jpg",
+	"top.jpg",
+	"bottom.jpg",
+	"front.jpg",
+	"back.jpg"
+};
+GLuint cubemapTexture = Loadcubemap(faces);
+
 int main()
 {
-	LoadShader loader;
-	BMP bmp;
-	ObjLoader objLoader;
+	
 	sf::ContextSettings settings;
 	settings.depthBits = 24;
 	settings.stencilBits = 8;
@@ -61,7 +78,6 @@ int main()
 	glm::vec3 lightPos(1.5f, 1.0f, 0.3f);
 	glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 
-	// This will identify our vertex buffer
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -260,3 +276,33 @@ void MouseCallback(sf::Window* window, double xpos, double ypos)
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront = glm::normalize(front);
 }
+
+GLuint Loadcubemap(std::vector<std::string> faces)
+{
+	GLuint cubeMapBuffer;
+	glGenTextures(1, &cubeMapBuffer);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapBuffer);
+
+	for (GLuint i = 0; i < faces.size(); i++)
+	{
+		sf::Image cubeMapPart;
+		if (!cubeMapPart.loadFromFile(faces[i].c_str()))
+		{
+			std::cout << "cubeMapPart " << i << "could not be loaded \n ";
+			return;
+		}
+
+		const sf::Uint8 * data = cubeMapPart.getPixelsPtr();
+		const sf::Vector2u imageSize = cubeMapPart.getSize();
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, imageSize.x, imageSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+}
+
+
