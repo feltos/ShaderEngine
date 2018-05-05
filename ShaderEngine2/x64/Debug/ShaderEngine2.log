@@ -1,0 +1,11 @@
+﻿  Main.cpp
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(39): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(145): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(182): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(232): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(233): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(237): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(238): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(239): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\shaderengine2\shaderengine2\shaderengine2\main.cpp(240): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  ShaderEngine2.vcxproj -> D:\ShaderEngine2\ShaderEngine2\x64\Debug\ShaderEngine2.exe
